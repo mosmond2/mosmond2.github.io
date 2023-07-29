@@ -1,84 +1,74 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title> Cereal Manufacturers Analysis </title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-  </head>
-  <body onload='init()'>
-  <h1> Statistics about Cereal Manufacturers! </h1>
-  <svg width="600" height="500"></svg>
-  <script>
-  
-    //setting initial vars	  
-    var svg = d3.select("svg")
-    var margin = 150
-    var width = svg.attr("width") - margin
-    var height = svg.attr("height") - margin;
+<head>
+    <title>Scatter Plot with Hover Popup</title>
+    <style>
+        /* Styling for the popup */
+        .popup {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 5px;
+            display: none;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scatter Plot with Hover Popup</h1>
+    <div id="scatterPlot" style="width: 400px; height: 300px; border: 1px solid #ccc; position: relative;"></div>
 
-    //setting x and y axis scales
-    var x = d3.scaleBand().range ([0, width]).padding(0.4)
-    var y = d3.scaleLinear().range ([height, 0]);
-    
-    //initializing group element 
-    var g = svg.append("g")
-    .attr("transform", "translate(" + 100 + "," + 100 + ")");
-    
-    //loading data and appending axis
-    async function init() {
-	    const data = await d3.csv('cereal.csv');
-      console.log(data)
-        
-	//setting axis domains based on data
-        x.domain(data.map(function(d) { return d.mfr; }));
-        y.domain([0, d3.max(data, function(d) { return d.rating; })]);
-        
-	//appending the x axis
-        g.append("g")
-         .attr("transform", "translate(0," + height + ")")
-         .call(d3.axisBottom(x))
-	 .append("text")
-	    .attr("x", width - 100)
-	    .attr("y", height - 250)
-	    .attr("text-anchor", "end")
-	    .attr("stroke", "black")
-	    .text("Manufacturer");
-		
-	//appending the y axis
-        g.append("g")
-         .call(d3.axisLeft(y).tickFormat(function(d){
-             return d;
-         }).ticks(10))
-	 .append("text")
-	    .attr("transform", "rotate(-90)")
-	    .attr("y", 6)
-	    .attr("dy", "-5.1em")
-		  .attr("text-anchor","end")
-	    .attr("stroke", "black")
-	    .text("Rating");
-	
-	 var sum = d3.sum(data, function(d) { return d.rating; });
-	 var avg = sum/data.length;
-	  
-	//adding the bars
-	g.selectAll(".bar")
-	    .data(data)
-	    .enter()
-	    .append("rect")
-	    .attr("class", "bar")
-	    .attr("x", function(d) { return x(d.mfr); })
-	    .attr("y", function(d) { return y(d.rating); })
-	    .attr("width", x.bandwidth())
-	    .attr("height", function(d) { return height - y(d.rating); });
-	    
-	//adding text element
-	 svg.append("text")
-	    .attr("transform", "translate(100,0)")
-	    .attr("x",50)
-	    .attr("y",50)
-	    .attr("font-size", "20px")
-	    .text("Manufacturer vs Avg Rating")	    
-	    
-};
-</script>
+    <!-- Include D3.js library -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <script>
+        // Sample data for the scatter plot
+        const data = [
+            { x: 50, y: 100 },
+            { x: 150, y: 50 },
+            { x: 250, y: 200 },
+            { x: 350, y: 150 },
+        ];
+
+        // Create the scatter plot
+        const scatterPlot = d3.select("#scatterPlot");
+
+        const points = scatterPlot
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .attr("r", 5)
+            .attr("fill", "steelblue")
+            .on("mouseover", showPopup)
+            .on("mouseout", hidePopup);
+
+        // Function to show the popup on hover
+        function showPopup(event, d) {
+            const popup = d3.select(this)
+                .attr("r", 8) // Increase the point size on hover
+                .append("div")
+                .attr("class", "popup")
+                .text(`(${d.x}, ${d.y})`);
+
+            // Calculate the position for the popup
+            const popupX = event.clientX + 10;
+            const popupY = event.clientY - 30;
+
+            popup.style("left", `${popupX}px`)
+                .style("top", `${popupY}px`)
+                .style("display", "block");
+        }
+
+        // Function to hide the popup on mouseout
+        function hidePopup() {
+            d3.select(this)
+                .attr("r", 5) // Reset the point size on mouseout
+                .select(".popup")
+                .remove();
+        }
+    </script>
 </body>
 </html>
