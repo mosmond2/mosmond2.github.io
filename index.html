@@ -164,10 +164,14 @@
             .call(yAxis);
 
         // Add event handlers for previous and next buttons
+        document.getElementById("prevBtn").addEventListener("click", function() {
+            window.location.href = "page1.html"; // Redirect to the previous page (page1.html)
+        });
 
         document.getElementById("nextBtn").addEventListener("click", function() {
-            window.location.href = "index2.html"; // Redirect to the next page (index2.html)
+            window.location.href = "page2.html"; // Redirect to the next page (page2.html)
         });
     </script>
 </body>
 </html>
+
