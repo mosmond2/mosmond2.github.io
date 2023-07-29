@@ -60,6 +60,23 @@
             .domain([0, d3.max(data, d => d.y)])
             .range([plotHeight, 0]);
 
+        // Function to show the popup on hover
+        function showPopup(event, d) {
+            const popup = svg.append("text")
+                .attr("class", "popup")
+                .attr("id", `popup-${d.x}-${d.y}`) // Unique identifier for each popup
+                .attr("x", margin.left + xScale(d.x) + 10)
+                .attr("y", margin.top + yScale(d.y) - 10)
+                .text(`(${d.x}, ${d.y})`);
+
+            popup.style("display", "block");
+        }
+
+        // Function to hide the popup on mouseout
+        function hidePopup(event, d) {
+            svg.select(`#popup-${d.x}-${d.y}`).remove(); // Remove the specific popup associated with the circle
+        }
+
         // Add circles for the scatter plot points
         const points = svg.selectAll("circle")
             .data(data)
@@ -71,7 +88,8 @@
             .attr("fill", (d, i) => colorScale(i)) // Use color scale to assign colors
             .on("mouseover", expandPoint)
             .on("mouseout", shrinkPoint)
-            .on("mousemove", showPopup);
+            .on("mousemove", showPopup)
+            .on("mouseout", hidePopup);
 
         // Function to expand the point on hover
         function expandPoint() {
@@ -87,22 +105,6 @@
                 .transition()
                 .duration(200)
                 .attr("r", 5);
-        }
-
-        // Function to show the popup on hover
-        function showPopup(event, d) {
-            const popup = svg.append("text")
-                .attr("class", "popup")
-                .attr("x", margin.left + xScale(d.x) + 10)
-                .attr("y", margin.top + yScale(d.y) - 10)
-                .text(`(${d.x}, ${d.y})`);
-
-            popup.style("display", "block");
-        }
-
-        // Function to hide the popup on mouseout
-        function hidePopup() {
-            d3.select(this).remove(); // Remove the specific popup associated with the circle
         }
 
         // Add axis labels and title
