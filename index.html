@@ -9,7 +9,6 @@
             background-color: white;
             border: 1px solid #ccc;
             padding: 5px;
-            display: none;
             pointer-events: none;
         }
     </style>
@@ -50,10 +49,10 @@
 
         // Function to show the popup on hover
         function showPopup(event, d) {
-            const popup = d3.select(this)
-                .attr("r", 8) // Increase the point size on hover
-                .append("div")
+            const popup = svg.append("text")
                 .attr("class", "popup")
+                .attr("x", d.x + 10)
+                .attr("y", d.y - 10)
                 .text(`(${d.x}, ${d.y})`);
 
             // Calculate the position for the popup
@@ -67,10 +66,7 @@
 
         // Function to hide the popup on mouseout
         function hidePopup() {
-            d3.select(this)
-                .attr("r", 5) // Reset the point size on mouseout
-                .select(".popup")
-                .remove();
+            svg.select(".popup").remove();
         }
     </script>
 </body>
