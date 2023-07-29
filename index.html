@@ -69,8 +69,25 @@
             .attr("cy", d => margin.top + yScale(d.y))
             .attr("r", 5)
             .attr("fill", (d, i) => colorScale(i)) // Use color scale to assign colors
-            .on("mouseover", showPopup)
-            .on("mouseout", hidePopup);
+            .on("mouseover", expandPoint)
+            .on("mouseout", shrinkPoint)
+            .on("mousemove", showPopup);
+
+        // Function to expand the point on hover
+        function expandPoint() {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("r", 8);
+        }
+
+        // Function to shrink the point on mouseout
+        function shrinkPoint() {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("r", 5);
+        }
 
         // Function to show the popup on hover
         function showPopup(event, d) {
@@ -85,7 +102,7 @@
 
         // Function to hide the popup on mouseout
         function hidePopup() {
-            svg.select(".popup").remove();
+            d3.select(".popup").remove();
         }
 
         // Add axis labels and title
@@ -128,4 +145,3 @@
     </script>
 </body>
 </html>
-
