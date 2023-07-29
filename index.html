@@ -11,6 +11,11 @@
             padding: 5px;
             pointer-events: none;
         }
+
+        /* Styling for the axis labels */
+        .axis-label {
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -29,21 +34,41 @@
             { x: 350, y: 150 },
         ];
 
+        // Define a color scale using D3.js color scheme
+        const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
         // Create the scatter plot
         const scatterPlot = d3.select("#scatterPlot");
 
-        const svg = scatterPlot.append("svg") // Add an SVG element to the container
-            .attr("width", 400)
-            .attr("height", 300);
+        // Set up the dimensions and margins for the plot
+        const width = 400;
+        const height = 300;
+        const margin = { top: 30, right: 30, bottom: 50, left: 50 };
+        const plotWidth = width - margin.left - margin.right;
+        const plotHeight = height - margin.top - margin.bottom;
 
-        const points = svg.selectAll("circle") // Select circles inside the SVG
+        const svg = scatterPlot.append("svg") // Add an SVG element to the container
+            .attr("width", width)
+            .attr("height", height);
+
+        // Create scales for the axes
+        const xScale = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.x)])
+            .range([0, plotWidth]);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.y)])
+            .range([plotHeight, 0]);
+
+        // Add circles for the scatter plot points
+        const points = svg.selectAll("circle")
             .data(data)
             .enter()
             .append("circle")
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y)
+            .attr("cx", d => margin.left + xScale(d.x))
+            .attr("cy", d => margin.top + yScale(d.y))
             .attr("r", 5)
-            .attr("fill", "steelblue")
+            .attr("fill", (d, i) => colorScale(i)) // Use color scale to assign colors
             .on("mouseover", showPopup)
             .on("mouseout", hidePopup);
 
@@ -51,23 +76,40 @@
         function showPopup(event, d) {
             const popup = svg.append("text")
                 .attr("class", "popup")
-                .attr("x", d.x + 10)
-                .attr("y", d.y - 10)
+                .attr("x", margin.left + xScale(d.x) + 10)
+                .attr("y", margin.top + yScale(d.y) - 10)
                 .text(`(${d.x}, ${d.y})`);
 
-            // Calculate the position for the popup
-            const popupX = event.clientX + 10;
-            const popupY = event.clientY - 30;
-
-            popup.style("left", `${popupX}px`)
-                .style("top", `${popupY}px`)
-                .style("display", "block");
+            popup.style("display", "block");
         }
 
         // Function to hide the popup on mouseout
         function hidePopup() {
             svg.select(".popup").remove();
         }
+
+        // Add axis labels and title
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", width / 2)
+            .attr("y", height - margin.bottom + 40)
+            .style("text-anchor", "middle")
+            .text("X Axis");
+
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("x", -height / 2)
+            .attr("y", margin.left - 20)
+            .attr("transform", "rotate(-90)")
+            .style("text-anchor", "middle")
+            .text("Y Axis");
+
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", margin.top)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .text("Scatter Plot");
     </script>
 </body>
 </html>
