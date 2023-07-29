@@ -102,7 +102,7 @@
 
         // Function to hide the popup on mouseout
         function hidePopup() {
-            d3.select(".popup").remove();
+            d3.select(this).remove(); // Remove the specific popup associated with the circle
         }
 
         // Add axis labels and title
@@ -145,3 +145,4 @@
     </script>
 </body>
 </html>
+
