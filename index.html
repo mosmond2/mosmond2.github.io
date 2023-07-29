@@ -33,8 +33,11 @@
         // Create the scatter plot
         const scatterPlot = d3.select("#scatterPlot");
 
-        const points = scatterPlot
-            .selectAll("circle")
+        const svg = scatterPlot.append("svg") // Add an SVG element to the container
+            .attr("width", 400)
+            .attr("height", 300);
+
+        const points = svg.selectAll("circle") // Select circles inside the SVG
             .data(data)
             .enter()
             .append("circle")
