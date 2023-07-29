@@ -35,6 +35,21 @@
             height: 400px;
             border: 1px solid #ccc;
         }
+
+        /* Styling for the button container */
+        #buttonContainer {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Styling for the buttons */
+        .navigation-btn {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -44,10 +59,6 @@
         <p id="dataDetails">Hover over the points to see the coordinates.</p>
     </div>
     <div id="scatterPlot"></div>
-    <div>
-        <button class="navigation-btn" id="prevBtn">Previous</button>
-        <button class="navigation-btn" id="nextBtn">Next</button>
-    </div>
 
     <!-- Include D3.js library -->
     <script src="https://d3js.org/d3.v6.min.js"></script>
@@ -153,12 +164,9 @@
             .call(yAxis);
 
         // Add event handlers for previous and next buttons
-        document.getElementById("prevBtn").addEventListener("click", function() {
-            window.location.href = "page1.html"; // Redirect to the previous page (page1.html)
-        });
 
         document.getElementById("nextBtn").addEventListener("click", function() {
-            window.location.href = "page2.html"; // Redirect to the next page (page2.html)
+            window.location.href = "index2.html"; // Redirect to the next page (index2.html)
         });
     </script>
 </body>
