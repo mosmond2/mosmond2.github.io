@@ -16,11 +16,24 @@
         .axis-label {
             font-size: 12px;
         }
+        
+        /* Styling for the text container */
+        #textContainer {
+            position: absolute;
+            top: 30px;
+            left: 600px;
+            width: 300px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <h1>Scatter Plot with Hover Popup</h1>
     <div id="scatterPlot" style="width: 500px; height: 400px; border: 1px solid #ccc; position: relative;"></div>
+    <div id="textContainer">
+        <h2>Data Details</h2>
+        <p id="dataDetails">Hover over the points to see the coordinates.</p>
+    </div>
 
     <!-- Include D3.js library -->
     <script src="https://d3js.org/d3.v6.min.js"></script>
@@ -41,7 +54,7 @@
         const scatterPlot = d3.select("#scatterPlot");
 
         // Set up the dimensions and margins for the plot
-        const width = 500;
+        const width = 900; // Increased to accommodate the text container
         const height = 400;
         const margin = { top: 30, right: 100, bottom: 70, left: 70 };
         const plotWidth = width - margin.left - margin.right;
