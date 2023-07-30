@@ -3,7 +3,7 @@ d3.csv("https://mosmond2.github.io/MinumumWageData.csv").then(function(data) {
     // Convert string values to numbers
     data.forEach(function(d) {
         d.Year = +d.Year;
-        d['Federal Minimum Wage'] = +d['Federal Minimum Wage'];
+        d['Federal.Minimum.Wage'] = +d['Federal.Minimum.Wage'];
     });
 
     // Define the dimensions and margins for the chart
@@ -26,7 +26,7 @@ d3.csv("https://mosmond2.github.io/MinumumWageData.csv").then(function(data) {
         .padding(0.1);
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d['Federal Minimum Wage'])])
+        .domain([0, d3.max(data, d => d['Federal.Minimum.Wage'])])
         .range([height, 0]);
 
     // Create the x and y axes
@@ -54,9 +54,9 @@ d3.csv("https://mosmond2.github.io/MinumumWageData.csv").then(function(data) {
         .append("rect")
         .attr("class", "bar")
         .attr("x", d => xScale(d.Year))
-        .attr("y", d => yScale(d['Federal Minimum Wage']))
+        .attr("y", d => yScale(d['Federal.Minimum.Wage']))
         .attr("width", xScale.bandwidth())
-        .attr("height", d => height - yScale(d['Federal Minimum Wage']));
+        .attr("height", d => height - yScale(d['Federal.Minimum.Wage']));
 
     // Add a title to the chart
     svg.append("text")
