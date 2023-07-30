@@ -33,7 +33,7 @@
 
       // Set up the chart dimensions
       const margin = { top: 50, right: 50, bottom: 50, left: 100 };
-      const width = 1000 - margin.left - margin.right; // Adjust the width here
+      const width = 2000 - margin.left - margin.right; // Adjust the width here
       const height = 500 - margin.top - margin.bottom;
 
       // Create the SVG element
@@ -87,7 +87,7 @@
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Federal Minimum Wage (Average)");
+        .text("Federal Minimum Wage");
 
     }).catch(function(error) {
       console.log("Error reading the data: ", error);
