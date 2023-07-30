@@ -6,7 +6,7 @@
   <style>
     /* Add any custom CSS styling here (optional) */
 
-        .button-container {
+    .button-container {
       text-align: center;
       margin-top: 20px;
     }
@@ -108,7 +108,7 @@
             .attr("x", xScale(d.Year) + xScale.bandwidth() / 2)
             .attr("y", yScale(d.FederalWage) - 10)
             .attr("text-anchor", "middle")
-            .text(d.FederalWage.toFixed(2));
+            .text("$" + d.FederalWage.toFixed(2));
 
           tooltip.node().addEventListener("mousemove", function(event) {
             tooltip.attr("x", event.offsetX).attr("y", event.offsetY - 10);
@@ -131,7 +131,7 @@
       svg.append("text")
         .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom) + ")")
         .style("text-anchor", "middle")
-        .text("Year");
+        .text("$" + "Year");
 
       svg.append("text")
         .attr("transform", "rotate(-90)")
@@ -139,7 +139,7 @@
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Federal Minimum Wage (Average)");
+        .text("Federal Minimum Wage");
 
     }).catch(function(error) {
       console.log("Error reading the data: ", error);
