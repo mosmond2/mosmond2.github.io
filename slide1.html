@@ -79,16 +79,17 @@
         .attr("width", xScale.bandwidth())
         .attr("height", d => height - yScale(d.FederalWage))
         .style("fill", "steelblue")
-        .on("mouseover", function(d) {
-          const xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() / 2;
-          const yPosition = parseFloat(d3.select(this).attr("y")) - 10;
-          
-          svg.append("text")
+        .on("mouseover", function(event, d) {
+          const tooltip = svg.append("text")
             .attr("class", "tooltip")
-            .attr("x", xPosition)
-            .attr("y", yPosition)
+            .attr("x", xScale(d.Year) + xScale.bandwidth() / 2)
+            .attr("y", yScale(d.FederalWage) - 10)
             .attr("text-anchor", "middle")
             .text(d.FederalWage.toFixed(2));
+
+          tooltip.node().addEventListener("mousemove", function(event) {
+            tooltip.attr("x", event.offsetX).attr("y", event.offsetY - 10);
+          });
         })
         .on("mouseout", function() {
           d3.select(".tooltip").remove();
@@ -123,3 +124,4 @@
   </script>
 </body>
 </html>
+
