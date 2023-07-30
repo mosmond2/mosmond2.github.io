@@ -112,7 +112,7 @@
             .attr("x", xScale(d.Year) + 10)
             .attr("y", yScale(d.StateMinimumWage) - 10)
             .attr("text-anchor", "start")
-            .style("fill", "white") // Set font color to white
+            .style("fill", "black") // Set font color to white
             .text(d.State + ": $" + d.StateMinimumWage.toFixed(2));
 
           // Adjust the tooltip position to prevent it from going beyond the chart boundaries
