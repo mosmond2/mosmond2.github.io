@@ -8,11 +8,17 @@
     .dot {
       fill-opacity: 0.7;
     }
+
+    .legend {
+      display: inline-block;
+      margin-left: 20px;
+    }
   </style>
 </head>
 <body>
   <h1>State Minimum Wage Scatterplot</h1>
   <div id="scatterplot"></div>
+  <div id="legend"></div>
 
   <script>
     // Use D3.js to read the CSV file and create the scatterplot
@@ -40,11 +46,11 @@
       });
 
       // Set up the chart dimensions
-      const margin = { top: 50, right: 50, bottom: 100, left: 100 };
+      const margin = { top: 50, right: 150, bottom: 100, left: 100 };
       const width = 800 - margin.left - margin.right;
-      const height = 500 - margin.top - margin.bottom;
+      const height = 600 - margin.top - margin.bottom; // Adjust the height here
 
-      // Create the SVG element
+      // Create the SVG element for the scatterplot
       const svg = d3.select("#scatterplot")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -59,6 +65,7 @@
 
       const yScale = d3.scaleLinear()
         .domain([0, d3.max(data, d => d["State.Minimum.Wage"])])
+        .nice(5) // Adjust the number of ticks
         .range([height, 0]);
 
       // Define a color scale for the states
@@ -102,8 +109,14 @@
         .style("text-anchor", "middle")
         .text("State Minimum Wage (Average)");
 
+      // Create the SVG element for the legend
+      const legendSvg = d3.select("#legend")
+        .append("svg")
+        .attr("width", 200)
+        .attr("height", height + margin.top + margin.bottom);
+
       // Create the legend
-      const legend = svg.selectAll(".legend")
+      const legend = legendSvg.selectAll(".legend")
         .data(scatterplotData.map(d => d.State))
         .enter()
         .append("g")
@@ -111,16 +124,15 @@
         .attr("transform", (d, i) => "translate(0," + (i * 20) + ")");
 
       legend.append("rect")
-        .attr("x", width - 18)
+        .attr("x", 0)
         .attr("width", 18)
         .attr("height", 18)
         .style("fill", d => colorScale(d));
 
       legend.append("text")
-        .attr("x", width - 24)
+        .attr("x", 24)
         .attr("y", 9)
         .attr("dy", ".35em")
-        .style("text-anchor", "end")
         .text(d => d);
 
     }).catch(function(error) {
