@@ -22,15 +22,26 @@
     .legend text {
       margin-left: 8px;
     }
+
+    .tooltip {
+      position: absolute;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px;
+      pointer-events: none;
+      font-size: 12px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
   <h1>State Minimum Wage Scatterplot</h1>
   <div id="chart"></div>
+  <div id="legend"></div>
 
   <script>
     // Use D3.js to read the CSV file and create the scatterplot
-    d3.csv("MinimumWageData.csv").then(function(data) {
+    d3.csv("MinumumWageData.csv").then(function(data) {
       if (data.length === 0) {
         console.log("Error: Data is empty or not loaded.");
         return;
@@ -92,7 +103,23 @@
         .append("circle")
         .attr("cx", d => xScale(d.Year))
         .attr("cy", d => yScale(d.StateMinimumWage))
-        .attr("r", 5);
+        .attr("r", 5)
+        .on("mouseover", function(event, d) {
+          const tooltip = svg.append("text")
+            .attr("class", "tooltip")
+            .attr("x", xScale(d.Year) + 10)
+            .attr("y", yScale(d.StateMinimumWage) - 10)
+            .attr("text-anchor", "start")
+            .text(d.State + ": $" + d.StateMinimumWage.toFixed(2));
+
+          // Adjust the tooltip position to prevent it from going beyond the chart boundaries
+          if (xScale(d.Year) + 10 + tooltip.node().getBBox().width > width) {
+            tooltip.attr("x", xScale(d.Year) - 10).attr("text-anchor", "end");
+          }
+        })
+        .on("mouseout", function() {
+          d3.selectAll(".tooltip").remove();
+        });
 
       // Create the x-axis
       svg.append("g")
@@ -118,7 +145,7 @@
         .text("State Minimum Wage (Average)");
 
       // Create the SVG element for the legend
-      const legendSvg = d3.select("#chart")
+      const legendSvg = d3.select("#legend")
         .append("svg")
         .attr("width", 200)
         .attr("height", height + margin.top + margin.bottom)
