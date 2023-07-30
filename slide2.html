@@ -10,15 +10,23 @@
     }
 
     .legend {
-      display: inline-block;
+      font-size: 12px;
       margin-left: 20px;
+    }
+
+    .legend rect {
+      width: 12px;
+      height: 12px;
+    }
+
+    .legend text {
+      margin-left: 8px;
     }
   </style>
 </head>
 <body>
   <h1>State Minimum Wage Scatterplot</h1>
-  <div id="scatterplot"></div>
-  <div id="legend"></div>
+  <div id="chart"></div>
 
   <script>
     // Use D3.js to read the CSV file and create the scatterplot
@@ -46,12 +54,12 @@
       });
 
       // Set up the chart dimensions
-      const margin = { top: 50, right: 150, bottom: 100, left: 100 };
+      const margin = { top: 50, right: 200, bottom: 100, left: 100 };
       const width = 800 - margin.left - margin.right;
-      const height = 600 - margin.top - margin.bottom; // Adjust the height here
+      const height = 600 - margin.top - margin.bottom;
 
-      // Create the SVG element for the scatterplot
-      const svg = d3.select("#scatterplot")
+      // Create the SVG element for the chart
+      const svg = d3.select("#chart")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -110,10 +118,12 @@
         .text("State Minimum Wage (Average)");
 
       // Create the SVG element for the legend
-      const legendSvg = d3.select("#legend")
+      const legendSvg = d3.select("#chart")
         .append("svg")
         .attr("width", 200)
-        .attr("height", height + margin.top + margin.bottom);
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // Create the legend
       const legend = legendSvg.selectAll(".legend")
@@ -124,15 +134,14 @@
         .attr("transform", (d, i) => "translate(0," + (i * 20) + ")");
 
       legend.append("rect")
-        .attr("x", 0)
-        .attr("width", 18)
-        .attr("height", 18)
+        .attr("width", 12)
+        .attr("height", 12)
         .style("fill", d => colorScale(d));
 
       legend.append("text")
-        .attr("x", 24)
-        .attr("y", 9)
-        .attr("dy", ".35em")
+        .attr("x", 18)
+        .attr("y", 6)
+        .attr("dy", "0.35em")
         .text(d => d);
 
     }).catch(function(error) {
