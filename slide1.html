@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Federal Minimum Wage Bar Chart</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    /* Add any custom CSS styling here (optional) */
+  </style>
+</head>
+<body>
+  <h1>Federal Minimum Wage Bar Chart</h1>
+  <div id="chart"></div>
+
+  <script>
+    // Use D3.js to read the CSV file and create the bar chart
+    d3.csv("MinumumWageData.csv").then(function(data) {
+      // Convert string values to numbers (optional, if needed)
+      data.forEach(function(d) {
+        d.Year = +d.Year;
+        d["Federal.Minimum.Wage"] = +d["Federal.Minimum.Wage"];
+      });
+
+      // Set up the chart dimensions
+      const margin = { top: 50, right: 50, bottom: 50, left: 50 };
+      const width = 800 - margin.left - margin.right;
+      const height = 500 - margin.top - margin.bottom;
+
+      // Create the SVG element
+      const svg = d3.select("#chart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // Create the scales for the chart
+      const xScale = d3.scaleBand()
+        .domain(data.map(d => d.Year))
+        .range([0, width])
+        .padding(0.1);
+
+      const yScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d["Federal.Minimum.Wage"])])
+        .range([height, 0]);
+
+      // Create the bars
+      svg.selectAll(".bar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", d => xScale(d.Year))
+        .attr("y", d => yScale(d["Federal.Minimum.Wage"]))
+        .attr("width", xScale.bandwidth())
+        .attr("height", d => height - yScale(d["Federal.Minimum.Wage"]))
+        .style("fill", "steelblue");
+
+      // Create the x-axis
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xScale));
+
+      // Create the y-axis
+      svg.append("g")
+        .call(d3.axisLeft(yScale));
+
+      // Add labels to the axes (optional)
+      svg.append("text")
+        .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom) + ")")
+        .style("text-anchor", "middle")
+        .text("Year");
+
+      svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Federal Minimum Wage");
+
+    }).catch(function(error) {
+      console.log("Error reading the data: ", error);
+    });
+  </script>
+</body>
+</html>
