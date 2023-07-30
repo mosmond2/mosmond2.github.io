@@ -104,7 +104,25 @@
         .attr("cx", d => xScale(d.Year))
         .attr("cy", d => yScale(d.StateMinimumWage))
         .attr("r", 5)
-        .style("display", "initial");
+        .style("display", "initial")
+        .on("mouseover", function(event, d) {
+          const tooltip = d3.select(this.parentNode) // Get the parent group of the data point
+            .append("text")
+            .attr("class", "tooltip")
+            .attr("x", xScale(d.Year) + 10)
+            .attr("y", yScale(d.StateMinimumWage) - 10)
+            .attr("text-anchor", "start")
+            .style("fill", "white") // Set font color to white
+            .text(d.State + ": $" + d.StateMinimumWage.toFixed(2));
+
+          // Adjust the tooltip position to prevent it from going beyond the chart boundaries
+          if (xScale(d.Year) + 10 + tooltip.node().getBBox().width > width) {
+            tooltip.attr("x", xScale(d.Year) - 10).attr("text-anchor", "end");
+          }
+        })
+        .on("mouseout", function() {
+          d3.select(this.parentNode).select(".tooltip").remove(); // Remove the tooltip on mouseout
+        });
 
       // Create the x-axis
       svg.append("g")
