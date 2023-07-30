@@ -5,6 +5,22 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     /* Add any custom CSS styling here (optional) */
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+    
     .dot {
       fill-opacity: 0.7;
     }
@@ -38,6 +54,12 @@
   <h1>State Minimum Wage Scatterplot</h1>
   <div id="chart" style="display: inline-block;"></div>
   <div id="legend" style="display: inline-block;"></div>
+
+<!-- Previous and Next Buttons -->
+  <div class="button-container">
+    <a class="button" href="previous-page.html">Previous</a>
+    <a class="button" href="next-page.html">Next</a>
+  </div>
 
   <script>
     // Use D3.js to read the CSV file and create the scatterplot
