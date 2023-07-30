@@ -32,8 +32,8 @@
       const aggregatedArray = Array.from(aggregatedData, ([Year, FederalWage]) => ({ Year, FederalWage }));
 
       // Set up the chart dimensions
-      const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-      const width = 800 - margin.left - margin.right;
+      const margin = { top: 50, right: 50, bottom: 50, left: 100 };
+      const width = 1000 - margin.left - margin.right; // Adjust the width here
       const height = 500 - margin.top - margin.bottom;
 
       // Create the SVG element
@@ -92,7 +92,3 @@
     }).catch(function(error) {
       console.log("Error reading the data: ", error);
     });
-  </script>
-</body>
-</html>
-
