@@ -13,7 +13,7 @@
 
   <script>
     // Use D3.js to read the CSV file and create the bar chart
-    d3.csv("MinimumWageData.csv").then(function(data) {
+    d3.csv("MinumumWageData.csv").then(function(data) {
       if (data.length === 0) {
         console.log("Error: Data is empty or not loaded.");
         return;
@@ -24,6 +24,12 @@
         d.Year = +d.Year;
         d["Federal.Minimum.Wage"] = +d["Federal.Minimum.Wage"];
       });
+
+      // Aggregate the data to compute the average Federal Wage Value for each Year
+      const aggregatedData = d3.rollup(data, v => d3.mean(v, d => d["Federal.Minimum.Wage"]), d => d.Year);
+
+      // Convert the aggregated data back to an array of objects
+      const aggregatedArray = Array.from(aggregatedData, ([Year, FederalWage]) => ({ Year, FederalWage }));
 
       // Set up the chart dimensions
       const margin = { top: 50, right: 50, bottom: 50, left: 50 };
@@ -40,24 +46,24 @@
 
       // Create the scales for the chart
       const xScale = d3.scaleBand()
-        .domain(data.map(d => d.Year))
+        .domain(aggregatedArray.map(d => d.Year))
         .range([0, width])
         .padding(0.1);
 
       const yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d["Federal.Minimum.Wage"])])
+        .domain([0, d3.max(aggregatedArray, d => d.FederalWage)])
         .range([height, 0]);
 
       // Create the bars
       svg.selectAll(".bar")
-        .data(data)
+        .data(aggregatedArray)
         .enter()
         .append("rect")
         .attr("class", "bar")
         .attr("x", d => xScale(d.Year))
-        .attr("y", d => yScale(d["Federal.Minimum.Wage"]))
+        .attr("y", d => yScale(d.FederalWage))
         .attr("width", xScale.bandwidth())
-        .attr("height", d => height - yScale(d["Federal.Minimum.Wage"]))
+        .attr("height", d => height - yScale(d.FederalWage))
         .style("fill", "steelblue");
 
       // Create the x-axis
@@ -81,7 +87,7 @@
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Federal Minimum Wage");
+        .text("Federal Minimum Wage (Average)");
 
     }).catch(function(error) {
       console.log("Error reading the data: ", error);
@@ -89,3 +95,4 @@
   </script>
 </body>
 </html>
+
