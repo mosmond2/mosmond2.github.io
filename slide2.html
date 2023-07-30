@@ -90,7 +90,7 @@
       // Define a color scale for the states
       const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-      // Create the group elements for each state's data
+      // Create the scatterplot dots
       const dots = svg.selectAll(".dot")
         .data(scatterplotData)
         .enter()
@@ -105,13 +105,12 @@
         .attr("cy", d => yScale(d.StateMinimumWage))
         .attr("r", 5)
         .on("mouseover", function(event, d) {
-          const tooltip = d3.select(this.parentNode) // Get the parent group of the data point
-            .append("text")
+          const tooltip = svg.append("text")
             .attr("class", "tooltip")
             .attr("x", xScale(d.Year) + 10)
             .attr("y", yScale(d.StateMinimumWage) - 10)
             .attr("text-anchor", "start")
-            .text("$" + d.StateMinimumWage.toFixed(2));
+            .text(d.State + ": $" + d.StateMinimumWage.toFixed(2));
 
           // Adjust the tooltip position to prevent it from going beyond the chart boundaries
           if (xScale(d.Year) + 10 + tooltip.node().getBBox().width > width) {
@@ -119,7 +118,7 @@
           }
         })
         .on("mouseout", function() {
-          d3.select(this.parentNode).select(".tooltip").remove(); // Remove the tooltip on mouseout
+          d3.selectAll(".tooltip").remove();
         });
 
       // Create the x-axis
