@@ -1,5 +1,5 @@
 // Fetch the CSV data and create the bar chart
-d3.csv("https://mosmond2.github.io/MinumumWageData.csv").then(function(data) {
+d3.csv("mosmond2.github.io/MinimumWageData.csv").then(function(data) {
     // Convert string values to numbers
     data.forEach(function(d) {
         d.Year = +d.Year;
