@@ -147,9 +147,9 @@
         .on("click", function(event, d) {
           const isSelected = d3.select(this).classed("selected-state");
           d3.select(this).classed("selected-state", !isSelected);
-          const selectedState = d3.selectAll(".selected-state").data();
+          const selectedState = d3.selectAll(".selected-state").data().map(d => d.State);
           dots.style("display", function(dotData) {
-            return selectedState.length === 0 || selectedState.map(d => d.State).includes(dotData.State) ? "initial" : "none";
+            return selectedState.length === 0 || selectedState.includes(dotData.State) ? "initial" : "none";
           });
         });
 
