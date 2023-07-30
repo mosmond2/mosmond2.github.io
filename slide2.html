@@ -10,17 +10,17 @@
     }
 
     .legend {
-      font-size: 12px;
-      margin-left: 20px;
+      font-size: 10px;
+      margin-left: 5px;
     }
 
     .legend rect {
-      width: 12px;
-      height: 12px;
+      width: 8px;
+      height: 8px;
     }
 
     .legend text {
-      margin-left: 8px;
+      margin-left: 5px;
     }
 
     .tooltip {
@@ -32,17 +32,12 @@
       font-size: 12px;
       border-radius: 4px;
     }
-
-    /* Add custom style for the selected state in the legend */
-    .selected-state {
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
   <h1>State Minimum Wage Scatterplot</h1>
-  <div id="chart"></div>
-  <div id="legend"></div>
+  <div id="chart" style="display: inline-block;"></div>
+  <div id="legend" style="display: inline-block;"></div>
 
   <script>
     // Use D3.js to read the CSV file and create the scatterplot
@@ -109,24 +104,7 @@
         .attr("cx", d => xScale(d.Year))
         .attr("cy", d => yScale(d.StateMinimumWage))
         .attr("r", 5)
-        .on("mouseover", function(event, d) {
-          const tooltip = d3.select(this.parentNode) // Get the parent group of the data point
-            .append("text")
-            .attr("class", "tooltip")
-            .attr("x", xScale(d.Year) + 10)
-            .attr("y", yScale(d.StateMinimumWage) - 10)
-            .attr("text-anchor", "start")
-            .style("fill", "black") // Set font color to black
-            .text(d.State + ": $" + d.StateMinimumWage.toFixed(2));
-
-          // Adjust the tooltip position to prevent it from going beyond the chart boundaries
-          if (xScale(d.Year) + 10 + tooltip.node().getBBox().width > width) {
-            tooltip.attr("x", xScale(d.Year) - 10).attr("text-anchor", "end");
-          }
-        })
-        .on("mouseout", function() {
-          d3.select(this.parentNode).select(".tooltip").remove(); // Remove the tooltip on mouseout
-        });
+        .style("display", "initial");
 
       // Create the x-axis
       svg.append("g")
@@ -154,10 +132,10 @@
       // Create the SVG element for the legend
       const legendSvg = d3.select("#legend")
         .append("svg")
-        .attr("width", 200)
+        .attr("width", 100)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(10," + margin.top + ")");
 
       // Create the legend
       const legend = legendSvg.selectAll(".legend")
@@ -165,27 +143,24 @@
         .enter()
         .append("g")
         .attr("class", "legend")
-        .attr("transform", (d, i) => "translate(0," + (i * 20) + ")")
+        .attr("transform", (d, i) => "translate(0," + (i * 15) + ")")
         .on("click", function(event, d) {
-          // Toggle visibility of data points for the clicked state
           const isSelected = d3.select(this).classed("selected-state");
           d3.select(this).classed("selected-state", !isSelected);
           const selectedState = d3.selectAll(".selected-state").data();
-
-          // Update data points visibility
           dots.style("display", function(dotData) {
             return selectedState.length === 0 || selectedState.map(d => d.State).includes(dotData.State) ? "initial" : "none";
           });
         });
 
       legend.append("rect")
-        .attr("width", 12)
-        .attr("height", 12)
+        .attr("width", 8)
+        .attr("height", 8)
         .style("fill", d => colorScale(d));
 
       legend.append("text")
-        .attr("x", 18)
-        .attr("y", 6)
+        .attr("x", 12)
+        .attr("y", 4)
         .attr("dy", "0.35em")
         .text(d => d);
 
@@ -195,4 +170,3 @@
   </script>
 </body>
 </html>
-
