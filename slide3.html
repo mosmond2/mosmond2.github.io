@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CPI.Average Scatterplots</title>
+  <title>Alabama CPI.Average Scatterplot</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     /* Add any custom CSS styling here (optional) */
@@ -11,90 +11,82 @@
   </style>
 </head>
 <body>
-  <h1>CPI.Average Scatterplots</h1>
+  <h1>Alabama CPI.Average Scatterplot</h1>
   <div id="chart"></div>
 
   <script>
-    // Use D3.js to read the CSV file and create the scatterplots
+    // Use D3.js to read the CSV file and create the scatterplot
     d3.csv("MinimumWageData.csv").then(function(data) {
       if (data.length === 0) {
         console.log("Error: Data is empty or not loaded.");
         return;
       }
 
+      // Filter data for "Alabama" state entry
+      const alabamaData = data.filter(d => d.State === "Alabama");
+
       // Convert string values to numbers (optional, if needed)
-      data.forEach(function(d) {
+      alabamaData.forEach(function(d) {
         d.Year = +d.Year;
         d["CPI.Average"] = +d["CPI.Average"];
       });
-
-      // Aggregate the data to group by unique "CPI.Average" values
-      const aggregatedData = d3.rollup(data, v => v, d => d["CPI.Average"]);
-
-      // Get unique "CPI.Average" values
-      const uniqueCPIAverageValues = Array.from(aggregatedData.keys());
 
       // Set up the chart dimensions
       const margin = { top: 50, right: 100, bottom: 100, left: 100 };
       const width = 800 - margin.left - margin.right;
       const height = 600 - margin.top - margin.bottom;
 
-      // Create separate SVG elements for each scatterplot
-      uniqueCPIAverageValues.forEach(cpiAvg => {
-        const filteredData = aggregatedData.get(cpiAvg);
+      // Create the SVG element for the chart
+      const svg = d3.select("#chart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        // Create the SVG element for the chart
-        const svg = d3.select("#chart")
-          .append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      // Create the scales for the chart
+      const xScale = d3.scaleLinear()
+        .domain(d3.extent(alabamaData, d => d.Year))
+        .range([0, width]);
 
-        // Create the scales for the chart
-        const xScale = d3.scaleLinear()
-          .domain(d3.extent(filteredData, d => d.Year))
-          .range([0, width]);
+      const yScale = d3.scaleLinear()
+        .domain(d3.extent(alabamaData, d => d["CPI.Average"]))
+        .nice(5) // Adjust the number of ticks
+        .range([height, 0]);
 
-        const yScale = d3.scaleLinear()
-          .domain(d3.extent(filteredData, d => d["CPI.Average"]))
-          .nice(5) // Adjust the number of ticks
-          .range([height, 0]);
+      // Create the group elements for the data points
+      const dots = svg.selectAll(".dot")
+        .data(alabamaData)
+        .enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("cx", d => xScale(d.Year))
+        .attr("cy", d => yScale(d["CPI.Average"]))
+        .attr("r", 5)
+        .style("fill", "steelblue");
 
-        // Create the group elements for the data points
-        const dots = svg.selectAll(".dot")
-          .data(filteredData)
-          .enter()
-          .append("circle")
-          .attr("class", "dot")
-          .attr("cx", d => xScale(d.Year))
-          .attr("cy", d => yScale(d["CPI.Average"]))
-          .attr("r", 5)
-          .style("fill", "steelblue");
+      // Create the x-axis
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xScale));
 
-        // Create the x-axis
-        svg.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(xScale));
+      // Create the y-axis
+      svg.append("g")
+        .call(d3.axisLeft(yScale));
 
-        // Create the y-axis
-        svg.append("g")
-          .call(d3.axisLeft(yScale));
+      // Add labels to the axes (optional)
+      svg.append("text")
+        .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom) + ")")
+        .style("text-anchor", "middle")
+        .text("Year");
 
-        // Add labels to the axes (optional)
-        svg.append("text")
-          .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom) + ")")
-          .style("text-anchor", "middle")
-          .text("Year");
-
-        svg.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 0 - margin.left)
-          .attr("x", 0 - (height / 2))
-          .attr("dy", "1em")
-          .style("text-anchor", "middle")
-          .text("CPI.Average: " + cpiAvg);
-      });
+      svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("CPI.Average (Alabama)");
     }).catch(function(error) {
       console.log("Error reading the data: ", error);
     });
