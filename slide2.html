@@ -32,6 +32,11 @@
       font-size: 12px;
       border-radius: 4px;
     }
+
+    /* Add custom style for the selected state in the legend */
+    .selected-state {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -41,7 +46,7 @@
 
   <script>
     // Use D3.js to read the CSV file and create the scatterplot
-    d3.csv("MinimumWageData.csv").then(function(data) {
+    d3.csv("MinumumWageData.csv").then(function(data) {
       if (data.length === 0) {
         console.log("Error: Data is empty or not loaded.");
         return;
@@ -90,7 +95,7 @@
       // Define a color scale for the states
       const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-      // Create the scatterplot dots
+      // Create the group elements for each state's data
       const dots = svg.selectAll(".dot")
         .data(scatterplotData)
         .enter()
@@ -105,11 +110,13 @@
         .attr("cy", d => yScale(d.StateMinimumWage))
         .attr("r", 5)
         .on("mouseover", function(event, d) {
-          const tooltip = svg.append("text")
+          const tooltip = d3.select(this.parentNode) // Get the parent group of the data point
+            .append("text")
             .attr("class", "tooltip")
             .attr("x", xScale(d.Year) + 10)
             .attr("y", yScale(d.StateMinimumWage) - 10)
             .attr("text-anchor", "start")
+            .style("fill", "black") // Set font color to black
             .text(d.State + ": $" + d.StateMinimumWage.toFixed(2));
 
           // Adjust the tooltip position to prevent it from going beyond the chart boundaries
@@ -118,7 +125,7 @@
           }
         })
         .on("mouseout", function() {
-          d3.selectAll(".tooltip").remove();
+          d3.select(this.parentNode).select(".tooltip").remove(); // Remove the tooltip on mouseout
         });
 
       // Create the x-axis
@@ -158,7 +165,18 @@
         .enter()
         .append("g")
         .attr("class", "legend")
-        .attr("transform", (d, i) => "translate(0," + (i * 20) + ")");
+        .attr("transform", (d, i) => "translate(0," + (i * 20) + ")")
+        .on("click", function(event, d) {
+          // Toggle visibility of data points for the clicked state
+          const isSelected = d3.select(this).classed("selected-state");
+          d3.select(this).classed("selected-state", !isSelected);
+          const selectedState = d3.selectAll(".selected-state").data();
+
+          // Update data points visibility
+          dots.style("display", function(dotData) {
+            return selectedState.length === 0 || selectedState.map(d => d.State).includes(dotData.State) ? "initial" : "none";
+          });
+        });
 
       legend.append("rect")
         .attr("width", 12)
@@ -177,3 +195,4 @@
   </script>
 </body>
 </html>
+
