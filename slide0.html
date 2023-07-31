@@ -44,6 +44,22 @@
       height: auto;
     }
 
+    .btn-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
     footer {
       text-align: center;
       padding: 10px;
@@ -63,23 +79,15 @@
     <p>
       In this interactive slideshow, you'll explore the changes in the national minimum wage over the years, view a scatterplot of the state minimum wages over time, and examine a scatter plot of the Consumer Price Index changes over the years.
     </p>
-    <div class="slideshow">
-      <img src="path_to_national_minimum_wage_slider_image.png" alt="National Minimum Wage Slider">
-      <p>National Minimum Wage Slider</p>
-    </div>
-    <div class="slideshow">
-      <img src="path_to_state_minimum_wage_scatterplot_image.png" alt="State Minimum Wage Scatterplot">
-      <p>State Minimum Wage Scatterplot</p>
-    </div>
-    <div class="slideshow">
-      <img src="path_to_cpi_scatterplot_image.png" alt="CPI Scatterplot">
-      <p>Consumer Price Index (CPI) Scatterplot</p>
+    <div class="btn-container">
+      <a class="btn" href="slide1.html" target="_blank">View National Minimum Wage Bar Chart</a>
+      <a class="btn" href="slide2.html" target="_blank">View State Minimum Wage Scatterplot</a>
+      <a class="btn" href="slide3.html" target="_blank">View CPI Scatterplot</a>
     </div>
   </main>
 
   <footer>
-    <p>Interactive Slideshow - Created by [Your Name]</p>
+    <p>Interactive Slideshow - Created by Maria Osmond</p>
   </footer>
 </body>
 </html>
-
