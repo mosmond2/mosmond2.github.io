@@ -1,33 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Alabama CPI.Average Scatterplot with Line of Best Fit</title>
+  <title>Alabama CPI.Average Scatterplot</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     /* Add any custom CSS styling here (optional) */
     .dot {
       fill-opacity: 0.7;
     }
-
-    .line {
-      fill: none;
-      stroke: red;
-      stroke-width: 2;
-    }
-
-    .tooltip {
-      position: absolute;
-      background-color: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 8px;
-      pointer-events: none;
-      font-size: 12px;
-      border-radius: 4px;
-    }
   </style>
 </head>
 <body>
-  <h1>Alabama CPI.Average Scatterplot with Line of Best Fit</h1>
+  <h1>Consumer Price Index Scatterplot</h1>
   <div id="chart"></div>
 
   <script>
@@ -70,22 +54,6 @@
         .nice(5) // Adjust the number of ticks
         .range([height, 0]);
 
-      // Calculate linear regression parameters
-      const regression = d3.regressionLinear()
-        .x(d => d.Year)
-        .y(d => d["CPI.Average"]);
-
-      const regressionParams = regression(alabamaData);
-
-      // Draw the line of best fit
-      svg.append("path")
-        .datum(regressionParams)
-        .attr("class", "line")
-        .attr("d", d3.line()
-          .x(d => xScale(d[0]))
-          .y(d => yScale(d[1]))
-        );
-
       // Create the group elements for the data points
       const dots = svg.selectAll(".dot")
         .data(alabamaData)
@@ -95,25 +63,7 @@
         .attr("cx", d => xScale(d.Year))
         .attr("cy", d => yScale(d["CPI.Average"]))
         .attr("r", 5)
-        .style("fill", "steelblue")
-        .on("mouseover", function(event, d) {
-          // Show tooltip with the equation of the line of best fit
-          const tooltip = svg.append("text")
-            .attr("class", "tooltip")
-            .attr("x", xScale(d.Year))
-            .attr("y", yScale(regressionParams.predict(d.Year)))
-            .attr("text-anchor", "start")
-            .style("fill", "white")
-            .text(`y = ${regressionParams.string()}`);
-
-          // Adjust the tooltip position to prevent it from going beyond the chart boundaries
-          if (xScale(d.Year) + tooltip.node().getBBox().width > width) {
-            tooltip.attr("x", xScale(d.Year) - 5).attr("text-anchor", "end");
-          }
-        })
-        .on("mouseout", function() {
-          svg.select(".tooltip").remove();
-        });
+        .style("fill", "steelblue");
 
       // Create the x-axis
       svg.append("g")
@@ -136,7 +86,7 @@
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("CPI.Average (Alabama)");
+        .text("Consumer Price Index");
     }).catch(function(error) {
       console.log("Error reading the data: ", error);
     });
