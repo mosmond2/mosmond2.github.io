@@ -12,7 +12,7 @@
     .tooltip {
       position: absolute;
       background-color: rgba(0, 0, 0, 0.7);
-      color: white;
+      color: black;
       padding: 8px;
       pointer-events: none;
       font-size: 12px;
@@ -81,7 +81,7 @@
             .attr("x", xScale(d.Year))
             .attr("y", yScale(d["CPI.Average"]) - 15)
             .attr("text-anchor", "middle")
-            .style("fill", "white")
+            .style("fill", "black")
             .text(`(${d.Year}, ${d["CPI.Average"].toFixed(2)})`);
 
           // Adjust the tooltip position to prevent it from going beyond the chart boundaries
