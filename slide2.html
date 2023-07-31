@@ -135,7 +135,7 @@
             .attr("y", yScale(d.StateMinimumWage) - 10)
             .attr("text-anchor", "start")
             .style("fill", "black") // Set font color to white
-            .text(d.State + ": $" + d.StateMinimumWage.toFixed(2));
+            .text("$" + d.StateMinimumWage.toFixed(2));
 
           // Adjust the tooltip position to prevent it from going beyond the chart boundaries
           if (xScale(d.Year) + 10 + tooltip.node().getBBox().width > width) {
@@ -167,7 +167,7 @@
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("State Minimum Wage (Average)");
+        .text("State Minimum Wage");
 
       // Create the SVG element for the legend
       const legendSvg = d3.select("#legend")
