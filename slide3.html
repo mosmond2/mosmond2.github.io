@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Alabama CPI.Average Scatterplot with Line of Best Fit</title>
+  <title>Alabama CPI.Average Scatterplot</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     /* Add any custom CSS styling here (optional) */
     .dot {
       fill-opacity: 0.7;
-    }
-
-    .line {
-      fill: none;
-      stroke: red;
-      stroke-width: 2;
     }
 
     .tooltip {
@@ -27,7 +21,7 @@
   </style>
 </head>
 <body>
-  <h1>Alabama CPI.Average Scatterplot with Line of Best Fit</h1>
+  <h1>Alabama CPI.Average Scatterplot</h1>
   <div id="chart"></div>
 
   <script>
@@ -70,22 +64,6 @@
         .nice(5) // Adjust the number of ticks
         .range([height, 0]);
 
-      // Calculate linear regression parameters
-      const regression = d3.regressionLinear()
-        .x(d => d.Year)
-        .y(d => d["CPI.Average"]);
-
-      const regressionParams = regression(alabamaData);
-
-      // Draw the line of best fit
-      svg.append("path")
-        .datum(regressionParams)
-        .attr("class", "line")
-        .attr("d", d3.line()
-          .x(d => xScale(d[0]))
-          .y(d => yScale(d[1]))
-        );
-
       // Create the group elements for the data points
       const dots = svg.selectAll(".dot")
         .data(alabamaData)
@@ -97,24 +75,19 @@
         .attr("r", 5)
         .style("fill", "steelblue")
         .on("mouseover", function(event, d) {
-          // Show tooltip with the equation of the line of best fit and coordinates of the data point
-          const tooltip = svg.append("g")
-            .attr("class", "tooltip");
-
-          tooltip.append("text")
+          // Show tooltip with the coordinates of the data point
+          const tooltip = svg.append("text")
+            .attr("class", "tooltip")
             .attr("x", xScale(d.Year))
             .attr("y", yScale(d["CPI.Average"]) - 15)
             .attr("text-anchor", "middle")
             .style("fill", "white")
             .text(`(${d.Year}, ${d["CPI.Average"].toFixed(2)})`);
 
-          tooltip.append("text")
-            .attr("x", xScale(d.Year))
-            .attr("y", yScale(regressionParams.predict(d.Year)) + 15)
-            .attr("text-anchor", "middle")
-            .style("fill", "white")
-            .text(`y = ${regressionParams.string()}`);
-
+          // Adjust the tooltip position to prevent it from going beyond the chart boundaries
+          if (xScale(d.Year) + tooltip.node().getBBox().width > width) {
+            tooltip.attr("x", xScale(d.Year) - 5).attr("text-anchor", "end");
+          }
         })
         .on("mouseout", function() {
           svg.select(".tooltip").remove();
@@ -148,3 +121,4 @@
   </script>
 </body>
 </html>
+
