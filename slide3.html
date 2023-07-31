@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Alabama CPI.Average Scatterplot</title>
+  <title>Consumer Price Index Over the Years</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     /* Add any custom CSS styling here (optional) */
@@ -28,7 +28,7 @@
   </style>
 </head>
 <body>
-  <h1>Alabama CPI.Average Scatterplot</h1>
+  <h1>CPI Scatterplot</h1>
   <div id="chart"></div>
 
   <div class="button-container">
@@ -97,7 +97,7 @@
 
       // Add labels to the axes (optional)
       svg.append("text")
-        .attr("transform", "translate(" + (width / 2) + "," + (height + margin.bottom) + ")")
+        .attr("transform", "translate(" + (width / 2) + (height + margin.bottom) + ")")
         .style("text-anchor", "middle")
         .text("Year");
 
@@ -107,7 +107,7 @@
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("CPI.Average (Alabama)");
+        .text("Consumer Price Index");
     }).catch(function(error) {
       console.log("Error reading the data: ", error);
     });
