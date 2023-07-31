@@ -5,6 +5,22 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     /* Add any custom CSS styling here (optional) */
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+    
     .dot {
       fill-opacity: 0.7;
     }
@@ -109,7 +125,7 @@
             .attr("x", xScale(d.Year))
             .attr("y", yScale(d["CPI.Average"]) - 15)
             .attr("text-anchor", "middle")
-            .style("fill", "white")
+            .style("fill", "black")
             .text(`(${d.Year}, ${d["CPI.Average"].toFixed(2)})`);
 
           // Adjust the tooltip position to prevent it from going beyond the chart boundaries
