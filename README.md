@@ -1,4 +1,4 @@
-# CS416Projects
+# CS416 Narrative Visualization Interactive Slideshow
 
 In this narrative visualization project, I am conveying the constant increase in minimum wage (both national and state) along with the rise in CPI from 1968 to 2020. To do this, I implemented an interactive slideshow structure so that the user can, at some points, hover over data points to view more information or click on textboxes to see more details about a topic. The slideshow is also restricted to allow the user to only go a page forward or backward, with the exception of the home screen, where the user can choose what slide to navigate to.
 
